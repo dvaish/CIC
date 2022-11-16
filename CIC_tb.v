@@ -11,7 +11,7 @@ module CIC_tb();
     localparam T = 2;
     localparam N = 2;
     localparam M = 1;
-    localparam BITS = 16;
+    localparam BITS = 32;
 
     integer fr, fw;
 

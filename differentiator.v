@@ -1,7 +1,6 @@
 module differentiator #(
     parameter N=2, 
-    parameter BITS=10, 
-    parameter N_BITS=$clog2(N)
+    parameter BITS=10
 ) (
     input clk, 
     input rst, 
@@ -10,9 +9,13 @@ module differentiator #(
     output reg [BITS-1:0] stream_out, 
     output reg ready
 );
+
+    localparam N_BITS = $clog2(N);
+
     integer i;
     
     reg [BITS-1:0] buffer [N-1:0];
+    reg [BITS-1:0] value;
     reg [N_BITS-1:0] pointer;
     
     always @(posedge clk) begin
@@ -24,7 +27,8 @@ module differentiator #(
                 buffer[i] <= 0;
             end
         end else if (valid) begin
-            stream_out <= stream_in - buffer[pointer];
+            value = stream_in - buffer[pointer];
+            stream_out <= value[BITS-1:N_BITS];
             buffer[pointer] <= stream_in;
             pointer <= pointer + 1 == N ? 0 : pointer + 1;
             ready <= 1;
